@@ -1,0 +1,67 @@
+try {
+importClass(com.terminalfour.navigation.ServerSideLinkManager);
+importClass(com.terminalfour.publish.utils.BrokerUtils);
+importClass(org.apache.commons.io.IOUtils);
+importClass(com.terminalfour.media.MediaManager);
+importClass(com.terminalfour.spring.ApplicationContextProvider);
+importClass(com.terminalfour.hierarchy.IHierarchyManager);
+importClass(com.terminalfour.hierarchy.Section);
+
+var templateUtils = eval(String (IOUtils.toString(MediaManager.manager.get(dbStatement, 846652, language).getMedia())));
+  
+var hierarchyManager = ApplicationContextProvider.getBean(IHierarchyManager);
+
+var SectionItem = ApplicationContextProvider.getBean(Section);
+
+  
+var mySSLManager = ServerSideLinkManager.getManager();
+
+               
+//Document Head
+document.write(templateUtils.processPartial(1012234));
+
+  
+var childCount = hierarchyManager.getChildrenUnsorted(25301);
+  
+childCount = String(childCount);
+  
+childCount = childCount.replace("[","");
+childCount = childCount.replace("]","");
+
+  
+childCount = childCount.split(",");
+  
+childSections = [];
+
+for(i=0; i<childCount.length; i++) {
+  
+  var childID = childCount[i].substring(
+    childCount[i].indexOf("id: ")+4, childCount[i].lastIndexOf("en:")-1
+);
+      childSections.push(childID);
+}
+  
+for(i=0; i<childSections.length; i++) {
+var channel = publishCache.getChannel();
+var mySection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, parseInt(childSections[i]), language);
+var mySectionName = mySection.getName(language);
+
+
+
+  if(mySection.isVisibleInNavigation()) {
+  
+  var myLinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, mySection, publishCache,language,isPreview);
+  
+  document.write('Section Name:<a href="' + myLinkObject.getLink() + '">' + mySectionName + '</a> | Section ID:' + childSections[i]+ '<br>');
+  
+}
+}
+  
+  
+  
+  
+}  
+  
+catch(err){
+    document.write(err);
+}

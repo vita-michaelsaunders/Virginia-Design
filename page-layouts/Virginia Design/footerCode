@@ -1,0 +1,20 @@
+try {
+importClass(com.terminalfour.sitemanager.cache.CachedContent);
+importClass(com.terminalfour.sitemanager.cache.utils.CSHelper);
+importClass(org.apache.commons.io.IOUtils);
+importClass(com.terminalfour.media.MediaManager);
+var templateUtils = eval(String (IOUtils.toString(MediaManager.manager.get(dbStatement, 846652, language).getMedia())));
+
+
+  
+document.write(templateUtils.processPartial(1012235));
+
+  
+} 
+
+//Footer
+
+catch(err){
+  document.write(err);
+}
+  
