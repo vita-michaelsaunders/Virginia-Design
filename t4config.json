@@ -5,13 +5,13 @@
   },
   "assets": {
     "contentLayouts": [],
-    "pageLayouts": [
+    "pageLayouts": [],
+    "media": [
       {
-        "id": 1011315,
-        "headerCode": "page-layouts/Virginia Design/headerCode",
-        "footerCode": "page-layouts/Virginia Design/footerCode"
+        "id": 1012234,
+        "description": "_head",
+        "projectPath": "medias/Categorised/developer/Virginia Design/utils/_head.html"
       }
-    ],
-    "media": []
+    ]
   }
 }
