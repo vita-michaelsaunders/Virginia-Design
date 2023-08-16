@@ -58,6 +58,11 @@ var mySectionName = mySection.getName(language);
 }
   
   
+var channel = publishCache.getChannel();
+var mySection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, 25301, language);
+var mySectionName = mySection.getName(language);
+  
+document.write(mySection.getChildren(channel, true).reverse()[0].getChildren(channel, true)[0]);
   
   
 }  
