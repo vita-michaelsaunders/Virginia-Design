@@ -1,0 +1,13 @@
+{
+"name": '<t4 type="content" name="Name" output="normal" modifiers="striptags,htmlentities" />',
+"image": '<t4 type="content" name="Image" output="normal" formatter="path/*" />',
+"heading": '<t4 type="content" name="Heading" output="normal" modifiers="striptags,htmlentities" />',
+"subheading": '<t4 type="content" name="Subheading" output="normal" modifiers="striptags,htmlentities" />',
+"description": '<t4 type="content" name="Description" output="normal" modifiers="medialibrary,nav_sections" />',
+"byline": '<t4 type="content" name="Byline" output="normal" modifiers="striptags,htmlentities" />',
+"link": '<t4 type="content" name="Link" output="normal" modifiers="striptags,htmlentities" />',
+"color": '<t4 type="content" name="Color" output="normal" display_field="value" />',
+"horizontal": '<t4 type="content" name="Horizontal" output="normal" display_field="value" />',
+"size": '<t4 type="content" name="Size" output="normal" display_field="value" />',
+"heading-size": '<t4 type="content" name="Change Heading Size" output="normal" display_field="value" />'
+}

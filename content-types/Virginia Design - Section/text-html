@@ -1,0 +1,47 @@
+try {
+importClass(com.terminalfour.sitemanager.cache.CachedContent);
+importClass(com.terminalfour.sitemanager.cache.utils.CSHelper);
+importClass(com.terminalfour.publish.utils.BrokerUtils);
+
+var sid = section.getID();
+var mode = isPreview ? CachedContent.CURRENT : CachedContent.APPROVED;
+       
+var contentInSection = CSHelper.extractCachedContent(section.getContent(publishCache.getChannel(), language, mode, false));
+
+var self;
+for (var c = 0; c < contentInSection.length; c++) {
+	if (contentInSection[c].getID() == content.getID()) {
+		self = c;
+		break;
+	}
+}
+var subsection = false;
+for (var i = self; i > -1; i--) {
+	if (contentInSection[i].getTemplateID() === 512 && !subsection) {
+		document.write('</section>');
+		subsection = true;
+	} else if ((contentInSection[i].getTemplateID() === 522 || contentInSection[i].getTemplateID() === 523) && !subsection) {
+    	document.write('</div></div></div>');
+    	subsection = true;
+    } else if (contentInSection[i].getTemplateID() === 511 && contentInSection[i].getID() !== content.getID() || contentInSection[i].getTemplateID() === 1734 && contentInSection[i].getID() !== content.getID() ) {
+		document.write('</section>');
+		break;
+	}
+}
+
+document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<section id="<t4 type="meta" meta="content_id" />" class="usa-section  <t4 type="content" name="Color" output="normal" display_field="value" /> <t4 type="content" name="New Section" output="normal" display_field="value" />">'));
+    	document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<t4 type="content" name="Background Image" output="selective-output" process-format="true" format="<div class=&quot;va-background-img&quot;>$value</div>" formatter="path/*" />'));
+if ((content.get('Heading').size > 0) || (content.get('Intro').size > 0)) {
+	document.write('<div class="grid-container">');
+    if (content.get('Underline Heading').size > 0) {
+    	document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<t4 type="content" name="Heading" output="selective-output" modifiers="striptags,htmlentities" format="<h2 class=&quot;vds-heading--intro&quot;>$value</h2>" />'));
+    } else {
+    	document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<t4 type="content" name="Heading" output="selective-output" modifiers="striptags,htmlentities" format="<h2>$value</h2>"/>'));
+    }
+    document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<t4 type="content" name="Intro" output="selective-output" modifiers="striptags,htmlentities" format="<p class=&quot;vds-intro&quot;>$value</p>" />'));
+    document.write('</div>');
+}
+
+} catch(err){
+  document.write(err);
+}

@@ -1,0 +1,71 @@
+try {
+importClass(com.terminalfour.sitemanager.cache.CachedContent);
+importClass(com.terminalfour.sitemanager.cache.utils.CSHelper);
+importClass(com.terminalfour.publish.utils.BrokerUtils);
+       
+var mode = isPreview ? CachedContent.CURRENT : CachedContent.APPROVED;
+var format = publishCache.getTemplateFormatting(dbStatement, content.getContentTypeID(), 'vagov/block');
+var processorType = format.getProcessor().getProcessorType();
+
+if(String(processorType) === 'rhino'){
+  var sw = new java.io.StringWriter();
+  var t4w = new com.terminalfour.utils.T4StreamWriter(sw);
+  new com.terminalfour.publish.ContentPublisher()
+  .write(t4w, dbStatement, publishCache, section, content, 'vagov/block', isPreview);
+  document.write(sw.toString());
+} else {
+  var formatString = format.getFormatting();
+    document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, formatString));
+}
+
+
+//Querys Content within Section
+
+var contentInSection = CSHelper.extractCachedContent(section.getContent(publishCache.getChannel(), language, mode, false));
+var self;
+for (var c = 0; c < contentInSection.length; c++) {
+  if (contentInSection[c].getID() == content.getID()) {
+    self = c;
+    break;
+  }
+}
+var inCollection = false;
+
+//Checks if within Collection Content Type
+
+for (var i=self; i>-1;i--) {
+  if (contentInSection[i].getTemplateID() === 516 || contentInSection[i].getTemplateID() === 521 || contentInSection[i].getTemplateID() === 1701) {
+      continue;
+    } else if (contentInSection[i].getTemplateID() === 1702) {
+      inCollection = true;
+      break;
+    } else {
+      break;
+    }
+}
+
+//If within Collection Content Type
+
+if (inCollection) {
+  if (self === contentInSection.length-1) {
+    document.write('</div></div>');
+  } else if (contentInSection[self+1].getTemplateID() !== 516 && contentInSection[self+1].getTemplateID() !== 521 && contentInSection[self+1].getTemplateID() !== 1701) {
+    document.write('</div></div>');
+  }
+}
+
+
+//Checks if last item in Section
+
+for (var i=self; i>-1;i--) {
+  if (contentInSection[i].getTemplateID() === 516 || contentInSection[i].getTemplateID() === 521 || contentInSection[i].getTemplateID() === 1701) {
+      continue;
+    } else if (contentInSection[i].getTemplateID() === 511 && self === contentInSection.length-1) {
+      document.write("</section>");
+      break;
+    } 
+}
+
+} catch(err){
+  document.write(err);
+}
