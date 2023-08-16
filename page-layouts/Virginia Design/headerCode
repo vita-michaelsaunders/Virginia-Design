@@ -21,7 +21,7 @@ var mySSLManager = ServerSideLinkManager.getManager();
 document.write(templateUtils.processPartial(1012234));
 
   
-var childCount = hierarchyManager.getChildrenUnsorted(25301);
+/*var childCount = hierarchyManager.getChildrenUnsorted(25301);
   
 childCount = String(childCount);
   
@@ -56,16 +56,82 @@ var mySectionName = mySection.getName(language);
   
 }
 }
+*/  
   
+/*var channel = publishCache.getChannel();
+var rootSection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, 25301, language);
+var rootSectionName = rootSection.getName(language);  
   
+for(i=0; i<rootSection.getChildren(channel, true).length; i++) {
+ 
+var childSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, rootSection.getChildren(channel, true).reverse()[i].getID(), language);
+var childSectionName = childSection.getName(language);
+var childLinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, childSection, publishCache,language,isPreview);
+  
+
+
+document.write('Section Name:<a href="' + childLinkObject.getLink() + '">' + childSectionName+ '</a> | Section ID:' + childSection.getID() + '<br>');
+  
+  }
+  
+}
+*/
+
+//Mobile Overlay
+document.write('<div class="usa-overlay"></div>');
+
+///Main Navigation Header
+  document.write('<header class="usa-header usa-header--basic">');
+
+////Main Navigation Container
+    document.write('<div class="usa-nav-container">');
+      document.write('<div class="usa-navbar">');
+        document.write('<div class="usa-logo">');
+          document.write('<em class="usa-logo__text"><a href="/" title="<Project title>">&lt;Project title&gt;</a></em>');
+    	document.write('</div>');
+      
+////Mobile Menu Button
+    document.write('<button type="button" class="usa-menu-btn">Menu</button>');
+    	document.write('</div>');
+////Main Nav Item    
+    document.write('<nav aria-label="Primary navigation" class="usa-nav">');
+  
+/////Close Button    
+  	document.write('<button type="button" class="usa-nav__close">');
+      document.write('<img src="/assets/img/usa-icons/close.svg" role="img" alt="Close" />');
+    document.write('</button>');
+/////Navigation Item List
+  	document.write('<ul class="usa-nav__primary usa-accordion">');
+
+
+//////Build Navigation Item List  
 var channel = publishCache.getChannel();
-var mySection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, 25301, language);
-var mySectionName = mySection.getName(language);
+var rootSection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, 25301, language);
+var rootSectionName = rootSection.getName(language);  
   
-document.write(mySection.getChildren(channel, true).reverse()[0].getChildren(channel, true)[0]);
+for(i=0; i<rootSection.getChildren(channel, true).length; i++) {
+ 
+var childSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, rootSection.getChildren(channel, true).reverse()[i].getID(), language);
+var childSectionName = childSection.getName(language);
+var childLinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, childSection, publishCache,language,isPreview);
+
+//Queried Navigation List Item   
+document.write('<li class="usa-nav__primary-item"><a href="' + childLinkObject.getLink() + '" class="usa-nav-link"><span>' + childSectionName+ '</span></a></li>');
+  
+  }
+  
+
+//////End Build Navigation Item List  
+
+document.write('</ul>');
+document.write('</nav>');
+document.write('</div>');
+document.write('</header>');
   
   
-}  
+}
+
+
   
 catch(err){
     document.write(err);
