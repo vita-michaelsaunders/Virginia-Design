@@ -22,19 +22,45 @@ i.e.
 
 @use "uswds-core" as *;
 
-.bg-primary-dark,.bg-primary-darker {
-   color: #fff;
-}
+//Grid
 
 .grid-container {
    padding-left: 2em;
    padding-right: 2em;
 }
 
+//Background Colors
+
+.bg-primary-dark,.bg-primary-darker {
+   color: #fff;
+}
+
+//Main Navigation
+
+/// Site Title
+.usa-logo__text {
+   display: block;
+   font-style: normal;
+   font-weight: 500;
+   margin: 0;
+}
+
+/// Navigation Links
+.usa-nav__primary>.usa-nav__primary-item>a {
+   font-weight: 500;
+   font-size: .9rem;
+}
+
+/// 
+
+// Buttons
+
 button.usa-button {
    font-weight: 500;
 }
 
+
+//Content
 
 .vds-intro {
    font-size: size('body', 'lg');
