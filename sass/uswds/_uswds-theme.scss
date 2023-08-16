@@ -1,0 +1,65 @@
+/*
+----------------------------------------
+USWDS with settings overrides
+----------------------------------------
+Uncomment the following lines and add a list of changed settings
+in the form $setting: value,
+----------------------------------------
+*/
+
+//
+ @use "uswds-core" with (
+
+ //Global
+
+    $theme-show-notifications: false,
+    $theme-global-content-styles: true,
+    $theme-grid-container-max-width: desktop-lg,
+    $theme-text-reverse-color: 'white',
+
+
+    //Typography
+    $theme-font-role-heading: 'sans',
+    $theme-font-type-sans: 'system',
+    $theme-h1-font-size: '3xl',
+    $theme-h2-font-size: '2xl',
+
+
+    //Primary Colors
+    $theme-color-primary: 'blue-60v',
+    $theme-color-primary-light: 'blue-30',
+    $theme-color-primary-lighter: 'blue-5',
+    $theme-color-primary-vivid: 'blue-40v',
+    $theme-color-primary-dark: 'blue-60v',
+    $theme-color-primary-darker: 'blue-70v',
+
+
+    //Accent Colors
+    $theme-color-accent-cool: 'blue-cool-50',
+    $theme-color-accent-cool-light: 'blue-cool-30',
+    $theme-color-accent-cool-lighter: 'blue-cool-10',
+    $theme-color-accent-cool-dark: 'blue-cool-60v',
+    $theme-color-accent-cool-darker: 'blue-cool-70v',
+
+    //Warm Color
+    $theme-color-accent-warm: 'yellow-20v',
+    $theme-color-accent-warm-light: 'yellow-10',
+    $theme-color-accent-warm-lighter: 'yellow-5',
+    $theme-color-accent-warm-dark: 'yellow-30',
+    $theme-color-accent-warm-darker: 'yellow-50v',
+
+    //Emergency
+    $theme-color-emergency: 'orange-warm-60v',
+    $theme-color-emergency-dark: 'orange-warm-70',
+
+
+
+    //Alerts
+    $theme-alert-icon-size: 4,
+    $theme-alert-padding-x: 1,
+
+    //Buttons
+    $theme-button-border-radius: "sm",
+
+    );
+

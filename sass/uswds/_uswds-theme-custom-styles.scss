@@ -1,0 +1,55 @@
+/*
+* * * * * ==============================
+* * * * * ==============================
+* * * * * ==============================
+* * * * * ==============================
+========================================
+========================================
+========================================
+----------------------------------------
+USWDS THEME CUSTOM STYLES
+----------------------------------------
+!! Copy this file to your project's
+   sass root. Don't edit the version
+   in node_modules.
+----------------------------------------
+Custom project SASS goes here.
+
+i.e.
+@include u-padding-right('05');
+----------------------------------------
+*/
+
+@use "uswds-core" as *;
+
+.bg-primary-dark,.bg-primary-darker {
+   color: #fff;
+}
+
+.grid-container {
+   padding-left: 2em;
+   padding-right: 2em;
+}
+
+button.usa-button {
+   font-weight: 500;
+}
+
+
+.vds-intro {
+   font-size: size('body', 'lg');
+   font-weight: $theme-font-weight-light;
+   color: color('gray-cool-60');
+}
+
+.vds-intro:after {
+   position: relative;
+   bottom: -0.25em;
+   left: 0;
+   display: block;
+   width: 2rem;
+   height: 2px;
+   background: color($theme-color-secondary);	
+   border-radius: 999px;
+   content: "";
+}
