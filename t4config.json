@@ -8,14 +8,14 @@
     "pageLayouts": [],
     "media": [
       {
-        "id": 1012215,
-        "description": "styles.css",
-        "projectPath": "medias/Categorised/developer/Virginia Design/assets/css/styles.css"
+        "id": 1012234,
+        "description": "_head",
+        "projectPath": "medias/Categorised/developer/Virginia Design/utils/_head.html"
       },
       {
-        "id": 1012327,
-        "description": "styles.css.map",
-        "projectPath": "medias/Categorised/developer/Virginia Design/assets/css/styles.css.map"
+        "id": 1012235,
+        "description": "_footer",
+        "projectPath": "medias/Categorised/developer/Virginia Design/utils/_footer.html"
       }
     ]
   }
