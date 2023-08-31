@@ -4,14 +4,14 @@ importClass(com.terminalfour.sitemanager.cache.utils.CSHelper);
 importClass(com.terminalfour.publish.utils.BrokerUtils);
        
 var mode = isPreview ? CachedContent.CURRENT : CachedContent.APPROVED;
-var format = publishCache.getTemplateFormatting(dbStatement, content.getContentTypeID(), 'vagov/block');
+var format = publishCache.getTemplateFormatting(dbStatement, content.getContentTypeID(), 'virginiaDesign/column');
 var processorType = format.getProcessor().getProcessorType();
 
 if(String(processorType) === 'rhino'){
   var sw = new java.io.StringWriter();
   var t4w = new com.terminalfour.utils.T4StreamWriter(sw);
   new com.terminalfour.publish.ContentPublisher()
-  .write(t4w, dbStatement, publishCache, section, content, 'vagov/block', isPreview);
+  .write(t4w, dbStatement, publishCache, section, content, 'virginiaDesign/column', isPreview);
   document.write(sw.toString());
 } else {
   var formatString = format.getFormatting();
@@ -61,7 +61,7 @@ for (var i=self; i>-1;i--) {
   if (contentInSection[i].getTemplateID() === 516 || contentInSection[i].getTemplateID() === 521 || contentInSection[i].getTemplateID() === 1701) {
       continue;
     } else if (contentInSection[i].getTemplateID() === 511 && self === contentInSection.length-1) {
-      document.write("</section>");
+      document.write("</div></section>");
       break;
     } 
 }

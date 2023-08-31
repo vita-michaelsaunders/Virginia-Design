@@ -1,5 +1,11 @@
 try {
 importClass(com.terminalfour.publish.utils.BrokerUtils);
+  importClass(com.terminalfour.sitemanager.cache.CachedContent);
+
+  
+var columnSize = BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<t4 type="content" name="Column Size" output="normal" display_field="value" />');
+  
+var codeInput = BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<t4 type="content" name="Code" output="normal" modifiers="medialibrary,nav_sections" />');
 
 var blockClass = BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<t4 type="content" name="Color" output="normal" display_field="value" />');
 var size = '',
@@ -19,7 +25,7 @@ if (String(content.get('Alignment').publish()) !== "") {
   blockAlignment = String(content.get('Alignment').publish());
 }
 
-document.write('<div class="grid-col-auto">');
+document.write('<div class="grid'+ columnSize +'">');
 
 if (content.get('Link').size > 0) {
   blockClass = blockClass+' va-block__link';
@@ -30,8 +36,8 @@ if (content.get('Link').size > 0) {
   document.write('<div class="'+blockClass+'">');
 }
 if (content.get('Image').size > 0) {
-  document.write('<div class="va-block__media">');
-  document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<img class="va-block__img js-load-image" src="<t4 type="content" name="Image" output="normal" formatter="image/pathResizeSmall" />" data-src="<t4 type="content" name="Image" output="normal" formatter="path/*" />" data-srcset="<t4 type="content" name="Image" output="normal" formatter="path/*" /> 720w, <t4 type="content" name="Image" output="normal" formatter="image/pathResizeMedium" /> 256w" sizes="(max-width: 756) 100vw, 756px" alt="<t4 type="content" name="Image" output="normal" formatter="description/*" />">'));
+  document.write('<div class="margin-bottom-1">');
+  document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<img src="<t4 type="content" name="Image" output="normal" formatter="image/pathResizeSmall" />" data-src="<t4 type="content" name="Image" output="normal" formatter="path/*" />" data-srcset="<t4 type="content" name="Image" output="normal" formatter="path/*" /> 720w, <t4 type="content" name="Image" output="normal" formatter="image/pathResizeMedium" /> 256w" sizes="(max-width: 756) 100vw, 756px" alt="<t4 type="content" name="Image" output="normal" formatter="description/*" />">'));
   document.write('</div>');
   document.write('<div class="va-block__text">');
 }
@@ -44,7 +50,7 @@ if (content.get('Byline').size > 0 && content.get('Image').size > 0) {
   
 //Heading  
 if (content.get('Heading').size > 0 || content.get('Subheading').size > 0) {
-  document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<h3 class="va-block__heading <t4 type="content" name="Change Heading Size" output="normal" display_field="value" />">'));
+  document.write('<h3>');
     if (content.get('Link').size > 0) {
     document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<t4 type="content" name="Heading" output="selective-output" modifiers="striptags,htmlentities" format="<span class=&quot;va-linkArrow va-icon va-icon--arrow-ext&quot;>$value</span>" />'));
   } else {
@@ -61,6 +67,22 @@ if (content.get('Byline').size > 0 && content.get('Image').size <= 0) {
   document.write('</p>');
 }
 document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, content, language, isPreview, '<t4 type="content" name="Description" output="selective-output" modifiers="medialibrary,nav_sections" format="<div class=&quot;va-block__description&quot;>$value</div>" />'));
+ 
+  	/*var formatter = 'collection/item';
+  
+  var mode = isPreview ? CachedContent.CURRENT : CachedContent.APPROVED;
+var format = publishCache.getTemplateFormatting(dbStatement, content.getContentTypeID(), 'virginiaDesign/column');
+var processorType = format.getProcessor().getProcessorType();
+
+                var sw = new java.io.StringWriter();
+  				var t4w = new com.terminalfour.utils.T4StreamWriter(sw);
+  				new com.terminalfour.publish.ContentPublisher()
+                .write(t4w, dbStatement, publishCache, section, codeInput,formatter, isPreview);
+                document.write(sw.toString());*/
+  
+  document.write(codeInput);
+  
+  
 if (content.get('Image').size > 0) {
   document.write('</div>');
 }
@@ -70,6 +92,11 @@ if (content.get('Link').size > 0) {
   document.write('</div>');
 }
 document.write('</div>');
-} catch(err){
+} 
+
+
+
+
+catch(err){
   document.write(err);
 }

@@ -6,76 +6,134 @@ importClass(com.terminalfour.media.MediaManager);
 importClass(com.terminalfour.spring.ApplicationContextProvider);
 importClass(com.terminalfour.hierarchy.IHierarchyManager);
 importClass(com.terminalfour.hierarchy.Section);
+importClass(com.terminalfour.sitemanager.cache.CachedContent);
+  importClass(com.terminalfour.publish.utils.TreeTraversalUtils);
+importClass(com.terminalfour.sitemanager.cache.utils.CSHelper);
+
+
 
 var templateUtils = eval(String (IOUtils.toString(MediaManager.manager.get(dbStatement, 846652, language).getMedia())));
-  
 var hierarchyManager = ApplicationContextProvider.getBean(IHierarchyManager);
-
 var SectionItem = ApplicationContextProvider.getBean(Section);
-
-  
 var mySSLManager = ServerSideLinkManager.getManager();
 
-               
-//Document Head
-document.write(templateUtils.processPartial(1012234));
-
+//var test1 = com.terminalfour.packages.exporter.resolver.Resolver.resolveT4Tags('<t4 type="media" id="998640" formatter="path/*" />');
   
-/*var childCount = hierarchyManager.getChildrenUnsorted(25301);
+//Site Config
   
-childCount = String(childCount);
-  
-childCount = childCount.replace("[","");
-childCount = childCount.replace("]","");
-
-  
-childCount = childCount.split(",");
-  
-childSections = [];
-
-for(i=0; i<childCount.length; i++) {
-  
-  var childID = childCount[i].substring(
-    childCount[i].indexOf("id: ")+4, childCount[i].lastIndexOf("en:")-1
-);
-      childSections.push(childID);
-}
-  
-for(i=0; i<childSections.length; i++) {
+//Find Site Root
+var sectionID = section.getID();
 var channel = publishCache.getChannel();
-var mySection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, parseInt(childSections[i]), language);
-var mySectionName = mySection.getName(language);
-
-
-
-  if(mySection.isVisibleInNavigation()) {
+var mySection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, sectionID, language);
+var mySectionParent;
+var findRoot = false;
+var siteRoot;
+var siteHome;
+  do {
+  if(String(mySection.getName(language)).indexOf("_")!== -1) {
+   findRoot = true;
+   siteRoot = mySection.getID();
+  }
+    else {
+  mySectionParent = mySection.getParent();
+	mySection =  mySectionParent
+    if(String(mySection.getName(language)).indexOf("_")!== -1 && String(mySection.getName(language)).indexOf("_") == 0) {
+      findRoot = true;
+      siteRoot = mySection.getID();
+    } 
+      }
+  }
+  while (findRoot == false);
   
-  var myLinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, mySection, publishCache,language,isPreview);
+//Parse Site Config
+var channel = publishCache.getChannel();
+var rootSection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, siteRoot, language);
+var rootSectionName = rootSection.getName(language); 
+var rootSectionChildren = rootSection.getChildren(channel, false);
+var siteConfigID;
   
-  document.write('Section Name:<a href="' + myLinkObject.getLink() + '">' + mySectionName + '</a> | Section ID:' + childSections[i]+ '<br>');
-  
-}
-}
-*/  
-  
-/*var channel = publishCache.getChannel();
-var rootSection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, 25301, language);
-var rootSectionName = rootSection.getName(language);  
-  
-for(i=0; i<rootSection.getChildren(channel, true).length; i++) {
- 
-var childSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, rootSection.getChildren(channel, true).reverse()[i].getID(), language);
-var childSectionName = childSection.getName(language);
-var childLinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, childSection, publishCache,language,isPreview);
-  
-
-
-document.write('Section Name:<a href="' + childLinkObject.getLink() + '">' + childSectionName+ '</a> | Section ID:' + childSection.getID() + '<br>');
-  
+  for(i=0; i< rootSectionChildren.length; i++) {
+    if(String(rootSectionChildren[i].getName(language)) == "site-config"){
+      siteConfigID = rootSectionChildren[i].getID();
+    }
   }
   
+  
+var sectionID = siteConfigID;
+var channel = publishCache.getChannel();
+var mySection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, siteConfigID, language);
+var mode = isPreview ? com.terminalfour.sitemanager.cache.CachedContent.CURRENT : com.terminalfour.sitemanager.cache.CachedContent.APPROVED;
+var mySectionContent = com.terminalfour.sitemanager.cache.utils.CSHelper.extractCachedContent(com.terminalfour.sitemanager.cache.utils.CSHelper.removeSpecialContent(mySection.getContent(channel, language, mode, true)));
+for (prop in mySectionContent) {
+  myContentID = mySectionContent[prop].getID();
+  var contentManager = com.terminalfour.spring.ApplicationContextProvider.getBean(com.terminalfour.content.IContentManager);
+  var myContent  = contentManager.get(myContentID,language);
+  var myContentType   = publishCache.getTemplate(dbStatement, myContent.getContentTypeID());
+  //var myContentTypeType = myContentType.getTemplateType() == 30 ? '<span class="badge badge-danger">System</span>' : '<span class="badge badge-info">Normal</span>';
+	
+  //Set Site Title
+  var siteTitle = myContent.get("Site Title");
+  
+  //Set Site Logo
+  var siteLogo = BrokerUtils.processT4Tags(dbStatement, publishCache, section, null, language, isPreview, myContent.get('Site Logo'));
+  
+  //Set Site Homepage
+  var siteHomepage = myContent.get('Site Homepage');
+  
+  //Set Custom Global CSS
+  var customCSS = BrokerUtils.processT4Tags(dbStatement, publishCache, section, null, language, isPreview, myContent.get('Custom Global CSS'));
+  
+  var mode = isPreview ? CachedContent.CURRENT : CachedContent.APPROVED;
+var mySSLManager = ServerSideLinkManager.getManager();
+var oConn = dbStatement.getConnection();
+var oCM = ApplicationContextProvider.getBean(com.terminalfour.content.IContentManager);
+  
+  if(siteHomepage.size > 0) {
+	var dataLink = mySSLManager.getLink(oConn,siteHomepage.getValue(),mySection.getID(),myContent.getID(),language);
+	var dataSectionId = dataLink.toSectionID;
+	var dataSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(publishCache.getChannel(),section,dataSectionId,language);
+  var dataContent = CSHelper.extractCachedContent(dataSection.getContent(publishCache.getChannel(), language, mode, false));
+  var siteHomeLinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, dataSection, publishCache,language,isPreview);
+  var siteHomeLink = siteHomeLinkObject.getLink();
 }
-*/
+  else {
+    
+      var siteHomeLink = "#";
+
+  }
+  
+  
+  
+}
+
+  
+//document.write(mySectionParent.getName(language));
+
+
+//Document Head
+//document.write(templateUtils.processPartial(1012234));
+  
+document.write('<!DOCTYPE html>');
+document.write('<html lang="en">');
+document.write('<head>');
+	document.write('<!--- Branding Bar --->');
+    document.write('<script src="https://www.developer.virginia.gov/media/developer/resources/branding-bar/brandingbar.php" data-item="va_aabrandingbar" aaname=\''+ siteTitle +'\' aatheme="aatheme-white" aaAnchorTag="'+ siteHomeLink +'" defer=""></script>');
+	document.write('<meta charset="UTF-8">');
+	document.write('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
+	document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
+	document.write('<title>'+ siteTitle +'</title>');
+	document.write('<!--- HighlightJS -->');
+    document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">');
+    document.write('<!--- Styles.css --->');
+   	document.write('<link rel="stylesheet" type="text/css" href="https://raw.githack.com/vita-michaelsaunders/Virginia-Design/main/medias/Categorised/developer/Virginia%20Design/assets/css/styles.css" />');
+document.write(customCSS);
+  document.write('</head>');     
+
+  
+  
+  
+
+  //document.write("jjj:"+ siteLogo.publish());
 
 //Mobile Overlay
 document.write('<div class="usa-overlay"></div>');
@@ -86,8 +144,9 @@ document.write('<div class="usa-overlay"></div>');
 ////Main Navigation Container
     document.write('<div class="usa-nav-container">');
       document.write('<div class="usa-navbar">');
-        document.write('<div class="usa-logo">');
-          document.write('<em class="usa-logo__text"><a href="/" title="<Project title>">&lt;Project title&gt;</a></em>');
+        document.write('<div class="usa-logo display-flex flex-align-center">');
+          document.write('<div class="maxh-10 maxw-10">'+ siteLogo +'</div>');
+          document.write('<em class="usa-logo__text padding-left-05"><a href="'+ siteHomeLink +'" title="'+ siteTitle +'">'+ siteTitle +'</a></em>');
     	document.write('</div>');
       
 ////Mobile Menu Button
@@ -98,7 +157,7 @@ document.write('<div class="usa-overlay"></div>');
   
 /////Close Button    
   	document.write('<button type="button" class="usa-nav__close">');
-      document.write('<img src="/assets/img/usa-icons/close.svg" role="img" alt="Close" />');
+      document.write('<img src="https://raw.githack.com/vita-michaelsaunders/Virginia-Design/main/medias/Categorised/developer/Virginia%20Design/assets/img/usa-icons/close.svg" role="img" alt="Close" />');
     document.write('</button>');
 /////Navigation Item List
   	document.write('<ul class="usa-nav__primary usa-accordion">');
@@ -106,18 +165,51 @@ document.write('<div class="usa-overlay"></div>');
 
 //////Build Navigation Item List  
 var channel = publishCache.getChannel();
-var rootSection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, 25301, language);
-var rootSectionName = rootSection.getName(language);  
-  
-for(i=0; i<rootSection.getChildren(channel, true).length; i++) {
- 
-var childSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, rootSection.getChildren(channel, true).reverse()[i].getID(), language);
+var rootSection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, siteRoot, language);
+var rootSectionName = rootSection.getName(language); 
+    
+var rootSectionChildSorted = rootSection.getChildren(channel, true);
+rootSectionChildSorted.sort(function(a,b){
+          return a.getPrintSequence() - b.getPrintSequence();
+        });
+    
+for(i=0; i<rootSectionChildSorted.length; i++) {
+var childSectionHasChildren = false; 
+var childSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, rootSectionChildSorted[i].getID(), language);
+  if(childSection == null) {
+   continue; 
+  }
+  if(childSection.getChildren(channel,true).length>0){
+   childSectionHasChildren = true;
+   var childSectionChildren = childSection.getChildren(channel,true); 
+  }
+
 var childSectionName = childSection.getName(language);
 var childLinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, childSection, publishCache,language,isPreview);
-
+ 
 //Queried Navigation List Item   
-document.write('<li class="usa-nav__primary-item"><a href="' + childLinkObject.getLink() + '" class="usa-nav-link"><span>' + childSectionName+ '</span></a></li>');
+  if(childSectionHasChildren) {
+      document.write('<li class="usa-nav__primary-item">');
+      document.write('<button type="button" class="usa-accordion__button usa-nav__link" aria-expanded="false" aria-controls="'+ childSectionName +'-child">');
+      document.write('<span>'+ childSectionName +'</span>');
+      document.write('</button>');
+      document.write('<ul id="'+ childSectionName +'-child" class="usa-nav__submenu" hidden>');
+      document.write('<li class="usa-nav__submenu-item"><a href="' + childLinkObject.getLink() + '" class="usa-nav-link"><span>' + childSectionName+ '</span></a></li>');
+
+    for (a=0; a < childSectionChildren.length; a++) {
+    var childSectionSub1 = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, childSectionChildren[a].getID(), language);
+    var childSectionNameSub1 = childSectionSub1.getName(language);
+    var childSub1LinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, childSectionSub1, publishCache,language,isPreview);
+    document.write('<li class="usa-nav__submenu-item"><a href="' + childSub1LinkObject.getLink() + '" class="usa-nav-link"><span>' + childSectionNameSub1+ '</span></a></li>');
+    }
+		document.write('</ul></li>');
+  }
   
+  
+  else {
+  document.write('<li class="usa-nav__primary-item"><a href="' + childLinkObject.getLink() + '" class="usa-nav-link"><span>' + childSectionName+ '</span></a></li>');
+  }
+    
   }
   
 
@@ -128,6 +220,69 @@ document.write('</nav>');
 document.write('</div>');
 document.write('</header>');
   
+  
+///Home or Not
+var sectionID = section.getID()
+var channel = publishCache.getChannel();
+var mySection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, sectionID, language);
+var mySectionParent  = mySection.getParent();
+var mySectionName = mySection.getName(language);
+ 
+  
+  if(String(sectionID) !== String(siteRoot)) {
+    document.write('<div class="usa-section bg-primary-darker">');
+    document.write('<div class="grid-container">');
+    document.write('<h1>'+ mySectionName +'</h1>');
+    document.write('</div>');
+    document.write('</div>');
+    document.write('<div class="grid-container">');
+    document.write('<nav class="usa-breadcrumb usa-breadcrumb--wrap" aria-label="Breadcrumbs,,,">');
+    document.write('<ol class="usa-breadcrumb__list">');
+    document.write('<li class="usa-breadcrumb__list-item"><a href="'+ siteHomeLink +'" class="usa-breadcrumb__link"><span>Home</span></a></li>');
+    document.write(BrokerUtils.processT4Tags(dbStatement, publishCache, section, null, language, isPreview, '<t4 type="navigation" name="Virginia Design - Breadcrumb" id="1268" />'));
+		document.write('</ol>');
+    document.write('</nav>');
+    document.write('</div>')
+  }
+
+  
+//Page Settings
+ 
+  
+var sideMenu = BrokerUtils.processT4Tags(dbStatement, publishCache, section, null, language, isPreview, '<t4 type="navigation" name="Virginia Design - Page Settings - Sidebar Menu Enable" id="1263" />');
+
+  if(sideMenu == "1") {
+   document.write('<div class="usa-in-page-nav-container">'); 
+   document.write('<aside class="usa-in-page-nav"></aside>'); 
+  }
+  
+document.write('<main>');  
+  
+  if(sideMenu == "1") {
+   document.write('<div class="grid-row">');
+   
+    document.write('<div class="tablet:grid-col-2">');
+    document.write('<div class="grid-row grid-gap">');
+  document.write('<div class="tablet:grid-col-4 margin-bottom-4 tablet:margin-bottom-0">');
+    document.write('<nav aria-label="Side navigation,">');
+  document.write('<ul class="usa-sidenav">');
+    document.write('<li class="usa-sidenav__item">');
+      document.write('<a href="javascript:void(0);" class="usa-current">Current page</a>');
+    document.write('</li>');
+    document.write('<li class="usa-sidenav__item">');
+      document.write('<a href="javascript:void(0);">Parent link</a>');
+    document.write('</li>');
+    document.write('<li class="usa-sidenav__item">');
+      document.write('<a href="javascript:void(0);">Parent link</a>');
+    document.write('</li>');
+  document.write('</ul>');
+document.write('</nav>');
+  document.write('</div>');
+   document.write('</div>');
+   document.write('</div>');
+   
+    document.write('<div class="tablet:grid-col">');
+  }
   
 }
 

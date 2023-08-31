@@ -4,8 +4,223 @@ importClass(com.terminalfour.sitemanager.cache.utils.CSHelper);
 importClass(org.apache.commons.io.IOUtils);
 importClass(com.terminalfour.media.MediaManager);
 var templateUtils = eval(String (IOUtils.toString(MediaManager.manager.get(dbStatement, 846652, language).getMedia())));
+  
+  
+//Site Config
+  
+//Find Site Root
+var sectionID = section.getID();
+var channel = publishCache.getChannel();
+var mySection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, sectionID, language);
+var mySectionParent;
+var findRoot = false;
+var siteRoot;
+var siteHome;
+  do {
+  if(String(mySection.getName(language)).indexOf("_")!== -1) {
+   findRoot = true;
+   siteRoot = mySection.getID();
+  }
+    else {
+  mySectionParent = mySection.getParent();
+	mySection =  mySectionParent
+    if(String(mySection.getName(language)).indexOf("_")!== -1 && String(mySection.getName(language)).indexOf("_") == 0) {
+      findRoot = true;
+      siteRoot = mySection.getID();
+    } 
+      }
+  }
+  while (findRoot == false);
+  
+//Parse Site Config
+var channel = publishCache.getChannel();
+var rootSection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, siteRoot, language);
+var rootSectionName = rootSection.getName(language); 
+var rootSectionChildren = rootSection.getChildren(channel, false);
+var siteConfigID;
+  
+  for(i=0; i< rootSectionChildren.length; i++) {
+    if(String(rootSectionChildren[i].getName(language)) == "site-config"){
+      siteConfigID = rootSectionChildren[i].getID();
+    }
+  }
+  
+  
+var sectionID = siteConfigID;
+var channel = publishCache.getChannel();
+var mySection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, siteConfigID, language);
+var mode = isPreview ? com.terminalfour.sitemanager.cache.CachedContent.CURRENT : com.terminalfour.sitemanager.cache.CachedContent.APPROVED;
+var mySectionContent = com.terminalfour.sitemanager.cache.utils.CSHelper.extractCachedContent(com.terminalfour.sitemanager.cache.utils.CSHelper.removeSpecialContent(mySection.getContent(channel, language, mode, true)));
+for (prop in mySectionContent) {
+  myContentID = mySectionContent[prop].getID();
+  var contentManager = com.terminalfour.spring.ApplicationContextProvider.getBean(com.terminalfour.content.IContentManager);
+  var myContent  = contentManager.get(myContentID,language);
+  var myContentType   = publishCache.getTemplate(dbStatement, myContent.getContentTypeID());
+  //var myContentTypeType = myContentType.getTemplateType() == 30 ? '<span class="badge badge-danger">System</span>' : '<span class="badge badge-info">Normal</span>';
+	
+  //Set Site Title
+  var siteTitle = myContent.get("Site Title");
+  
+  //Set Site Logo
+  var siteLogo = BrokerUtils.processT4Tags(dbStatement, publishCache, section, null, language, isPreview, myContent.get('Site Logo'));
+  
+  //Set Site Homepage
+  var siteHomepage = myContent.get('Site Homepage');
+  
+  var mode = isPreview ? CachedContent.CURRENT : CachedContent.APPROVED;
+var mySSLManager = ServerSideLinkManager.getManager();
+var oConn = dbStatement.getConnection();
+var oCM = ApplicationContextProvider.getBean(com.terminalfour.content.IContentManager);
+  
+  if(siteHomepage.size > 0) {
+	var dataLink = mySSLManager.getLink(oConn,siteHomepage.getValue(),mySection.getID(),myContent.getID(),language);
+	var dataSectionId = dataLink.toSectionID;
+	var dataSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(publishCache.getChannel(),section,dataSectionId,language);
+  var dataContent = CSHelper.extractCachedContent(dataSection.getContent(publishCache.getChannel(), language, mode, false));
+  var siteHomeLinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, dataSection, publishCache,language,isPreview);
+  var siteHomeLink = siteHomeLinkObject.getLink();
+}
+  else {
+      var siteHomeLink = "#";
+  }  
+  
+}
 
 
+
+  //Page Settings
+  
+var sideMenu = BrokerUtils.processT4Tags(dbStatement, publishCache, section, null, language, isPreview, '<t4 type="navigation" name="Virginia Design - Page Settings - Sidebar Menu Enable" id="1263" />');
+
+  if(sideMenu == "1") {
+   document.write('</div>');
+   document.write('</div>');
+  }
+
+document.write('</main>');
+
+  if(sideMenu == "1") {
+   document.write('</div>');
+  }
+
+  
+//Footer
+  
+document.write('<footer class="usa-footer">');
+  document.write('<div class="grid-container usa-footer__return-to-top">');
+  document.write('<a href="#">Return to top</a>');
+  document.write('</div>');
+  
+  //Footer Navigation - Main Navigation  
+  document.write('<div class="usa-footer__primary-section bg-base-lightest">');
+    document.write('<div class="grid-row">');
+      document.write('<div class="mobile-lg:grid-col">');
+        document.write('<nav class="usa-footer__nav" aria-label="Footer navigation,">');
+          document.write('<ul class="grid-row grid-gap">');
+  
+//////Build Navigation Item List  
+var channel = publishCache.getChannel();
+var rootSection  = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, siteRoot, language);
+var rootSectionName = rootSection.getName(language);
+  
+var rootSectionChildSorted = rootSection.getChildren(channel, true);
+
+rootSectionChildSorted.sort(function(a,b){
+          return a.getPrintSequence() - b.getPrintSequence();
+        });
+  
+  
+  
+for(i=0; i<rootSectionChildSorted.length; i++) {
+var childSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, rootSectionChildSorted[i].getID(), language);
+  if(childSection == null) {
+   continue; 
+  }
+var childSectionName = childSection.getName(language);
+var childLinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, childSection, publishCache,language,isPreview);
+
+//Queried Navigation List Item   
+document.write('<li class="mobile-lg:grid-col-6 desktop:grid-col-auto usa-footer__primary-content">');
+document.write('<a href="' + childLinkObject.getLink() + '" class="usa-footer__primary-link"><span>' + childSectionName+ '</span></a>');
+document.write('</li>');  
+  }
+  
+          document.write('</ul>');
+        document.write('</nav>');
+  
+  //End Footer Navigation - Main Navigation
+  
+//Footer Navigation - Custom Navigation
+  document.write('<div class="usa-footer__primary-section bg-base-lighter">');
+    document.write('<div class="grid-row">');
+      document.write('<div class="mobile-lg:grid-col">');
+        document.write('<nav class="usa-footer__nav" aria-label="Footer navigation,">');
+          document.write('<ul class="grid-row grid-gap">');
+  
+//////Build Navigation Item List  
+var channel = publishCache.getChannel();
+var siteConfigSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, siteConfigID, language);
+var siteConfigSectionChildren = siteConfigSection.getChildren(channel, false);
+var footerSectionID;
+  
+  for(i=0; i< siteConfigSectionChildren.length; i++) {
+    if(String(siteConfigSectionChildren[i].getName(language)) == "Footer" || String(siteConfigSectionChildren[i].getName(language)) == "footer"){
+      footerSectionID = siteConfigSectionChildren[i].getID();
+    }
+  } 
+  
+var footerSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, footerSectionID, language);
+var footerSectionChildren = footerSection.getChildren(channel, true);
+
+footerSectionChildren.sort(function(a,b){
+          return a.getPrintSequence() - b.getPrintSequence();
+        });
+  
+   
+for(i=0; i<footerSectionChildren.length; i++) {
+var childSection = com.terminalfour.publish.utils.TreeTraversalUtils.findSection(channel, section, footerSectionChildren[i].getID(), language);
+  if(childSection == null) {
+   continue; 
+  }
+var childSectionName = childSection.getName(language);
+var childLinkObject = com.terminalfour.publish.PathBuilder.getLink(dbStatement, section, childSection, publishCache,language,isPreview);
+
+//Queried Navigation List Item   
+document.write('<li class="mobile-lg:grid-col-6 desktop:grid-col-auto usa-footer__primary-content">');
+document.write('<a href="' + childLinkObject.getLink() + '" class="usa-footer__primary-link"><span>' + childSectionName+ '</span></a>');
+document.write('</li>');  
+  }
+  
+          document.write('</ul>');
+        document.write('</nav>');
+          document.write('</div></div></div>');
+
+  
+  //End Footer Navigation - Custom Navigation
+  
+  
+
+
+  document.write('<div class="usa-footer__secondary-section bg-primary-darker">');
+    document.write('<div class="grid-container">');
+      document.write('<div class="usa-footer__logo grid-row grid-gap-2">');
+          document.write('<address class="usa-footer__address tablet:grid-col-8 padding-3">');
+            document.write('<div class="grid-row grid-gap">');
+              document.write('<div class="grid-col-auto">');
+                document.write('<a href="tel:1-800-555-5555">&lt;(800) 555-GOVT&gt;</a>');
+              document.write('</div>');
+              document.write('<div class="grid-col-auto">');
+                document.write('<a href="mailto:info@agency.gov">&lt;info@agency.gov&gt;</a>');
+              document.write('</div>');
+            document.write('</div>');
+          document.write('</address>');
+        document.write('<div class="tablet:grid-col-4 padding-3">');
+          document.write('<p><b>'+ siteTitle +'</b></p>');
+        document.write('</div>');
+      document.write('</div>');
+    document.write('</div>');
+  document.write('</div>');
+document.write('</footer>');
   
 document.write(templateUtils.processPartial(1012235));
 
