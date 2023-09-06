@@ -7,7 +7,7 @@ importClass(com.terminalfour.spring.ApplicationContextProvider);
 importClass(com.terminalfour.hierarchy.IHierarchyManager);
 importClass(com.terminalfour.hierarchy.Section);
 importClass(com.terminalfour.sitemanager.cache.CachedContent);
-  importClass(com.terminalfour.publish.utils.TreeTraversalUtils);
+importClass(com.terminalfour.publish.utils.TreeTraversalUtils);
 importClass(com.terminalfour.sitemanager.cache.utils.CSHelper);
 
 
