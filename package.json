@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@uswds/compile": "^1.1.0"
+  },
+  "dependencies": {
+    "@uswds/uswds": "3.7.1"
+  }
+}
