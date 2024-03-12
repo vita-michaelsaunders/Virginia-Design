@@ -57,7 +57,7 @@ in the form $setting: value,
     //Navigation
     $theme-header-max-width: 'widescreen',
 
-    
+
     
     //Alerts
     $theme-alert-icon-size: 4,
@@ -66,5 +66,11 @@ in the form $setting: value,
     //Buttons
     $theme-button-border-radius: "sm",
 
+    //Utilities
+    $flex-wrap-settings: (
+      responsive: "true"
+    )
+
     );
 
+    
