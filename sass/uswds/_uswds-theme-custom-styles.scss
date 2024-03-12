@@ -78,3 +78,7 @@ button.usa-button {
 .usa-footer__primary-link {
    color: $theme-color-base-dark;
 }
+
+footer .bg-primary-darker a.usa-footer__primary-link, footer .bg-primary-darker a.usa-footer__primary-link:visited {
+   color:#fff;
+}
