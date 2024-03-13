@@ -75,6 +75,14 @@ button.usa-button {
 
 //Footer
 
+.usa-footer a {
+   text-decoration: none;
+}
+
+.usa-footer a:hover {
+   text-decoration: underline;
+}
+
 .usa-footer__primary-link {
    color: $theme-color-base-dark;
 }
