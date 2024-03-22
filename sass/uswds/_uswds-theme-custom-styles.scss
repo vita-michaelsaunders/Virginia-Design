@@ -85,6 +85,20 @@ button.usa-button {
    content: "";
 }
 
+
+
+//Collections
+
+.usa-collection__calendar-date, .usa-collection__img {
+   width: 7rem;
+}
+
+@media (min-width: 40em) {
+.usa-collection__calendar-date, .usa-collection__img {
+    width: 7rem;
+}
+}
+
 //Footer
 
 .grid-container.usa-footer__return-to-top a:visited {
