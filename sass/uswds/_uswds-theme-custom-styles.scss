@@ -56,6 +56,15 @@ header button.usa-accordion__button.usa-nav__link, header .usa-nav__primary>.usa
    font-weight: 500;
 }
 
+//Page Header 
+
+@media (min-width: 40em) {
+.page-header.usa-section {
+    padding-bottom: 2.5rem;
+    padding-top: 2.5rem;
+}
+
+}
 
 
 // Buttons
