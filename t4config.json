@@ -2143,6 +2143,91 @@
         "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/uswds-icons/identification.svg"
       },
       {
+        "id": 1011662,
+        "description": "icon-dot-gov.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/icon-dot-gov.svg"
+        },
+        {
+        "id": 1011663,
+        "description": "hero.jpg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/hero.jpg"
+        },
+        {
+        "id": 1011661,
+        "description": "correct8.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/correct8.svg"
+        },
+        {
+        "id": 1011660,
+        "description": "correct8-alt.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/correct8-alt.svg"
+        },
+        {
+        "id": 1011659,
+        "description": "sprite.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/sprite.svg"
+        },
+        {
+        "id": 1011641,
+        "description": "loader.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/loader.svg"
+        },
+        {
+        "id": 1011640,
+        "description": "logo-img.png",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/logo-img.png"
+        },
+        {
+        "id": 1011639,
+        "description": "lock.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/lock.svg"
+        },
+        {
+        "id": 1011638,
+        "description": "loader.gif",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/loader.gif"
+        },
+        {
+        "id": 1011637,
+        "description": "circle-124.png",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/circle-124.png"
+        },
+        {
+        "id": 1011636,
+        "description": "file-word.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/file-word.svg"
+        },
+        {
+        "id": 1011635,
+        "description": "file-pdf.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/file-pdf.svg"
+        },
+        {
+        "id": 1011634,
+        "description": "icon-https.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/icon-https.svg"
+        },
+        {
+        "id": 1011633,
+        "description": "circle-gray-20.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/circle-gray-20.svg"
+        },
+        {
+        "id": 1011632,
+        "description": "file-excel.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/file-excel.svg"
+        },
+        {
+        "id": 1011631,
+        "description": "us_flag_small.png",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/us_flag_small.png"
+        },
+        {
+        "id": 1011630,
+        "description": "file-video.svg",
+        "projectPath": "medias/Categorised/developer/Virginia Design/assets/img/file-video.svg"
+        },        
+      {
         "id": 1012215,
         "description": "styles.css",
         "projectPath": "medias/Categorised/developer/Virginia Design/assets/css/styles.css"
