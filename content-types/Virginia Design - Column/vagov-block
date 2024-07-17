@@ -25,7 +25,7 @@ if (String(content.get('Alignment').publish()) !== "") {
   blockAlignment = String(content.get('Alignment').publish());
 }
 
-document.write('<div class="grid'+ columnSize +'">');
+document.write('<div class="tablet:grid'+ columnSize +'">');
 
 if (content.get('Link').size > 0) {
   blockClass = blockClass+' va-block__link';
