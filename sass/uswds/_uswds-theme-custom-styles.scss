@@ -66,6 +66,15 @@ header button.usa-accordion__button.usa-nav__link, header .usa-nav__primary>.usa
 
 }
 
+///Hero Section 
+.usa-hero {
+   background-image: none;
+}
+
+.usa-hero > img {
+   object-fit: cover;
+   object-position: top;
+}
 
 // Buttons
 
