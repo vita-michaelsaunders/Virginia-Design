@@ -99,7 +99,7 @@ button.usa-button {
  }
 
  @media screen and (min-width: 1024px) {
-   .tablet-desktop\:flex-row {
+   .desktop\:flex-row {
     flex-direction: row;
    }
  }
@@ -119,7 +119,7 @@ button.usa-button {
  }
 
  @media screen and (min-width: 1024px) {
-   .tablet-desktop\:flex-column {
+   .desktop\:flex-column {
     flex-direction: column;
    }
  }
