@@ -85,6 +85,7 @@ button.usa-button {
 
 //Cards
 
+//Row
 @media screen and (min-width: 640px) {
    .tablet\:flex-row {
     flex-direction: row;
@@ -100,6 +101,26 @@ button.usa-button {
  @media screen and (min-width: 1024px) {
    .tablet-desktop\:flex-row {
     flex-direction: row;
+   }
+ }
+
+ 
+//Column 
+ @media screen and (min-width: 640px) {
+   .tablet\:flex-column {
+    flex-direction: column;
+   }
+ }
+
+ @media screen and (min-width: 880px) {
+   .tablet-lg\:flex-column {
+    flex-direction: column;
+   }
+ }
+
+ @media screen and (min-width: 1024px) {
+   .tablet-desktop\:flex-column {
+    flex-direction: column;
    }
  }
  
