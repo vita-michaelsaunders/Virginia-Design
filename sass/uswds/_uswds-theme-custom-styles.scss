@@ -83,6 +83,28 @@ button.usa-button {
 }
 
 
+//Cards
+
+@media screen and (min-width: 640px) {
+   .tablet\:flex-row {
+    flex-direction: row;
+   }
+ }
+
+ @media screen and (min-width: 880px) {
+   .tablet-lg\:flex-row {
+    flex-direction: row;
+   }
+ }
+
+ @media screen and (min-width: 1024px) {
+   .tablet-desktop\:flex-row {
+    flex-direction: row;
+   }
+ }
+ 
+
+
 //Content
 
 .vds-intro {
