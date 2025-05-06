@@ -4,5 +4,8 @@
   },
   "dependencies": {
     "@uswds/uswds": "3.7.1"
+  },
+  "scripts": {
+    "build": "npx uswds-compile"
   }
 }

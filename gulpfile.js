@@ -18,6 +18,8 @@ uswds.settings.version = 3;
 */
 uswds.paths.dist.css = './medias/Categorised/developer/Virginia Design/assets/css';
 uswds.paths.dist.theme = './sass/uswds';
+uswds.paths.dist.img = './medias/Categorised/developer/Virginia Design/assets/img'
+/*uswds.paths.src.projectIcons = './medias/Categorised/developer/Virginia Design/assets/images'*/
 
 /**
 * Exports
