@@ -75,7 +75,19 @@ in the form $setting: value,
 
     $max-width-settings: (
       responsive: "true"
+    ),
+
+    //Breakpoints
+
+    $theme-utility-breakpoints: (
+    "widescreen" : true,
+    "desktop-lg": true,  
+    "tablet-lg": true,
+    "mobile":true,
+    "card-lg":true,
+    "card":true
     )
+
 
     );
 
